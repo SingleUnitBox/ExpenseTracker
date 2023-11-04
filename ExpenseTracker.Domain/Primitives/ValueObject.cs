@@ -51,6 +51,6 @@ namespace ExpenseTracker.Domain.Primitives
             }
             return hashCode.ToHashCode();
         }
-        protected abstract IEnumerable<ValueObject> GetAtomicValues();
+        protected abstract IEnumerable<object> GetAtomicValues();
     }
 }

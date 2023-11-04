@@ -8,11 +8,11 @@ namespace ExpenseTracker.Domain.Events
     {
         public Guid EventId { get; }
 
-        public DateTime OccuredOnUtc { get; }
+        public DateTime OccurredOnUtc { get; }
         protected internal BaseDomainEvent()
         {
             EventId = Guid.NewGuid();
-            OccuredOnUtc = DateTime.UtcNow;
+            OccurredOnUtc = DateTime.UtcNow;
         }
     }
 }
