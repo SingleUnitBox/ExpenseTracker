@@ -7,8 +7,8 @@ namespace ExpenseTracker.Domain.Primitives
 {
     public class Result
     {
-        public bool Success { get; }
-        public bool Failure => !Success;
+        public bool IsSuccess { get; }
+        public bool IsFailure => !IsSuccess;
         public string Error { get; }
         protected Result(bool success, string error)
         {
@@ -22,7 +22,7 @@ namespace ExpenseTracker.Domain.Primitives
                 throw new InvalidOperationException();
             }
 
-            Success = success;
+            IsSuccess = success;
             Error = error;
         }
         public static Result Fail(string error) => new Result(false, error);
@@ -33,7 +33,7 @@ namespace ExpenseTracker.Domain.Primitives
         {
             foreach (Result result in results)
             {
-                if (result.Failure)
+                if (result.IsFailure)
                 {
                     return result;
                 }               
@@ -48,7 +48,7 @@ namespace ExpenseTracker.Domain.Primitives
         {
             get
             {
-                if (!Success)
+                if (!IsSuccess)
                 {
                     throw new InvalidOperationException();
                 }
