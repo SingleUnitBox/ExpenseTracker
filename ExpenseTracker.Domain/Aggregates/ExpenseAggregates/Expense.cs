@@ -1,4 +1,5 @@
-﻿using ExpenseTracker.Domain.Primitives;
+﻿using ExpenseTracker.Domain.Exceptions;
+using ExpenseTracker.Domain.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
@@ -29,5 +30,21 @@ namespace ExpenseTracker.Domain.Aggregates.ExpenseAggregates
         public DateTime CreatedOnUtc { get; }
 
         public DateTime? UpdatedOnOnUtc { get; }
+        public void ChangeAmount(decimal amount)
+        {
+            if (amount < decimal.Zero)
+            {
+                throw new DomainException("Amount cannot be less than zero.");
+            }
+            Money = Money.ChangeAmount(amount);
+        }
+        public void ChangeCurrency(Currency currency)
+        {
+            if (currency == null)
+            {
+                throw new DomainException("Currency cannot be null.");
+            }
+            Money = Money.ChangeCurrency(currency);
+        }
     }
 }

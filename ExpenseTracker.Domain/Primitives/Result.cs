@@ -10,19 +10,19 @@ namespace ExpenseTracker.Domain.Primitives
         public bool IsSuccess { get; }
         public bool IsFailure => !IsSuccess;
         public string Error { get; }
-        protected Result(bool success, string error)
+        protected Result(bool isSuccess, string error)
         {
-            if (success && !string.IsNullOrWhiteSpace(error))
+            if (isSuccess && !string.IsNullOrWhiteSpace(error))
             {
                 throw new InvalidOperationException();
             }
 
-            if (!success && string.IsNullOrWhiteSpace(error))
+            if (!isSuccess && string.IsNullOrWhiteSpace(error))
             {
                 throw new InvalidOperationException();
             }
 
-            IsSuccess = success;
+            IsSuccess = isSuccess;
             Error = error;
         }
         public static Result Fail(string error) => new Result(false, error);

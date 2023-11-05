@@ -1,4 +1,5 @@
-﻿using ExpenseTracker.Domain.Primitives;
+﻿using ExpenseTracker.Domain.Extensions;
+using ExpenseTracker.Domain.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,18 +17,15 @@ namespace ExpenseTracker.Domain.Aggregates.ExpenseAggregates
         {
             Value = email;
         }
-        public static Result<Email> Create(string email)
+        public static Result<Email> Create(Maybe<string> emailOrNothing)
         {
-            email = (email ?? string.Empty).Trim();
-
-            if (email.Length == 0)
-            {
-                return Result.Fail<Email>("Email should not be empty.");
-            }
-
-            bool isRegexMatch = Regex.IsMatch(email, EmailRegexPattern, RegexOptions.IgnoreCase);
-
-            return isRegexMatch ? Result.Ok(new Email(email)) : Result.Fail<Email>("Email is invalid.");
+            return emailOrNothing
+                .ToResult("Email should not be empty.")
+                .OnSuccess(email => email.Trim())
+                .Ensure(email => email != string.Empty, "Email should not be empty")
+                .Ensure(email => email.Length < 256, "Email cannot be longer than 265 characters.")
+                .Ensure(email => Regex.IsMatch(email, EmailRegexPattern), "Email is invalid.")
+                .Map(email => new Email(email));
         }
 
         protected override IEnumerable<object> GetAtomicValues()
